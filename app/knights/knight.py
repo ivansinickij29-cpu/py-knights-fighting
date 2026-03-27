@@ -1,3 +1,7 @@
+from app.knights.weapon import Weapon
+from app.knights.armour import Armour
+from app.knights.potion import Potion
+
 class Knight:
     def __init__(self, name: str, power: int, hp: int) -> None:
         self.name = name
@@ -5,13 +9,13 @@ class Knight:
         self.hp = hp
         self.protection = 0
 
-    def equip_weapon(self, weapon) -> None:
+    def equip_weapon(self, weapon: Weapon) -> None:
         self.power += weapon.power
 
-    def equip_armour(self, armour) -> None:
+    def equip_armour(self, armour: Armour) -> None:
         self.protection += armour.protection
 
-    def drink_potion(self, potion) -> None:
+    def drink_potion(self, potion: Potion) -> None:
         if potion.stat == "power":
             self.power += potion.value
         elif potion.stat == "hp":
