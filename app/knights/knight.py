@@ -1,7 +1,6 @@
 from app.knights.weapon import Weapon
 from app.knights.armour import Armour
-
-
+from app.knights.potion import Potion
 
 class Knight:
     def __init__(self, name: str, power: int, hp: int) -> None:
@@ -16,7 +15,7 @@ class Knight:
     def equip_armour(self, armour: Armour) -> None:
         self.protection += armour.protection
 
-    def drink_potion(self, potion) -> None:
+    def drink_potion(self, potion: Potion) -> None:
         for stat, value in potion.effect.items():
             if stat == "power":
                 self.power += value
