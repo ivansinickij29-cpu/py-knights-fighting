@@ -2,6 +2,7 @@ from app.knights.weapon import Weapon
 from app.knights.armour import Armour
 from app.knights.potion import Potion
 
+
 class Knight:
     def __init__(self, name: str, power: int, hp: int) -> None:
         self.name = name
