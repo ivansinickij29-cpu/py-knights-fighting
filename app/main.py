@@ -28,8 +28,7 @@ def prepare_knight(data: dict) -> Knight:
     potion_data = data["potion"]
     if potion_data:
         potion = Potion(
-            stat=potion_data["stat"],
-            value=potion_data["value"]
+            effect=potion_data
         )
         knight.drink_potion(potion)
 
@@ -44,11 +43,13 @@ def battle(knight1: dict, knight2: dict) -> str:
         damage_to_k2 = max(0, k1.power - k2.protection)
         k2.hp -= damage_to_k2
         if k2.hp <= 0:
+            k2.hp = 0
             return k1.name
 
         damage_to_k1 = max(0, k2.power - k1.protection)
         k1.hp -= damage_to_k1
         if k1.hp <= 0:
+            k1.hp = 0
             return k2.name
 
     return k1.name
