@@ -11,48 +11,55 @@ def prepare_knight(data: dict) -> Knight:
         hp=data["hp"]
     )
 
-    weapon_data = data["weapon"]
-    weapon = Weapon(
+    weapon_data = data.get("weapon")
+    if weapon_data:
+        weapon = Weapon(
         name=weapon_data["name"],
         power=weapon_data["power"]
-    )
-    knight.equip_weapon(weapon)
+        )
+        knight.equip_weapon(weapon)
 
-    for armour_data in data["armour"]:
+    for armour_data in data.get("armour", []):
         armour = Armour(
             name=armour_data["part"],
             protection=armour_data["protection"]
         )
         knight.equip_armour(armour)
 
-    potion_data = data["potion"]
-    if potion_data:
-        potion = Potion(
-            effect=potion_data
-        )
+    potion_data = data.get("potion")
+    if potion_data and potion_data.get("effect"):
+        potion = Potion(effect=potion_data["effect"])
         knight.drink_potion(potion)
 
     return knight
 
+def battle(knights_config: dict) -> str:
+    lancelot = prepare_knight(knights_config["lancelot"])
+    mordred = prepare_knight(knights_config["mordred"])
 
-def battle(knight1: dict, knight2: dict) -> str:
-    k1 = prepare_knight(knight1)
-    k2 = prepare_knight(knight2)
+    while lancelot.hp > 0 and mordred.hp > 0:
+        damage_to_mordred = max(0, lancelot.power - mordred.protection)
+        damage_to_lancelot = max(0, mordred.power - lancelot.protection)
 
-    while k1.hp > 0 and k2.hp > 0:
-        damage_to_k2 = max(0, k1.power - k2.protection)
-        k2.hp -= damage_to_k2
-        if k2.hp <= 0:
-            k2.hp = 0
-            return k1.name
+        mordred.hp -= damage_to_mordred
+        lancelot.hp -= damage_to_lancelot
 
-        damage_to_k1 = max(0, k2.power - k1.protection)
-        k1.hp -= damage_to_k1
-        if k1.hp <= 0:
-            k1.hp = 0
-            return k2.name
+        if mordred.hp <= 0 and lancelot.hp <= 0:
+            mordred.hp = 0
+            lancelot.hp = 0
+            return lancelot.name
 
-    return k1.name
+        if mordred.hp <= 0:
+            mordred.hp = 0
+            return lancelot.name
+
+        if lancelot.hp <= 0:
+            lancelot.hp = 0
+            return mordred.name
+
+    if lancelot.hp > 0:
+        return lancelot.name
+    return mordred.name
 
 
 KNIGHTS = {
